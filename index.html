@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Incredibox-like</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <h1>Cria a tua melodia</h1>
+
+    <!-- Área onde estão os ícones de som pré-definidos -->
+    <div id="sound-palette">
+        <div class="sound-icon" draggable="true" data-sound="sounds/beat1.mp3">
+            <img src="icons/beat1.png" alt="Beat 1" />
+            <span>Beat 1</span>
+        </div>
+        <div class="sound-icon" draggable="true" data-sound="sounds/beat2.mp3">
+            <img src="icons/beat2.png" alt="Beat 2" />
+            <span>Beat 2</span>
+        </div>
+        <div class="sound-icon" draggable="true" data-sound="sounds/bass1.mp3">
+            <img src="icons/bass1.png" alt="Bass 1" />
+            <span>Bass 1</span>
+        </div>
+        <div class="sound-icon" draggable="true" data-sound="sounds/melody1.mp3">
+            <img src="icons/melody1.png" alt="Melody 1" />
+            <span>Melody 1</span>
+        </div>
+        <div class="sound-icon" draggable="true" data-sound="sounds/melody2.mp3">
+            <img src="icons/melody2.png" alt="Melody 2" />
+            <span>Melody 2</span>
+        </div>
+        <!-- Podes adicionar mais ícones conforme necessário -->
+    </div>
+
+    <!-- Canvas onde o utilizador larga os sons e eles tocam em loop -->
+    <div id="canvas-area">
+        <p>Aqui arrasta os sons para criares a tua melodia</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
