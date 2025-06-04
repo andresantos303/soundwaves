@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Incredibox-like</title>
+    <title>SoundWaves</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,7 +11,7 @@
 
     <!-- Área onde estão os ícones de som pré-definidos -->
     <div id="sound-palette">
-        <div class="sound-icon" draggable="true" data-sound="sounds/beat1.mp3">
+        <div class="sound-icon" draggable="true" data-sound="sounds/drums.mp3">
             <img src="icons/beat1.png" alt="Beat 1" />
             <span>Beat 1</span>
         </div>
@@ -31,12 +31,16 @@
             <img src="icons/melody2.png" alt="Melody 2" />
             <span>Melody 2</span>
         </div>
-        <!-- Podes adicionar mais ícones conforme necessário -->
     </div>
 
-    <!-- Canvas onde o utilizador larga os sons e eles tocam em loop -->
+    <!-- Canvas onde se largam os sons -->
     <div id="canvas-area">
-        <p>Aqui arrasta os sons para criares a tua melodia</p>
+        <p>Arrasta aqui os sons para começar a tocar</p>
+    </div>
+
+    <!-- Área de menus de controlo (volume e velocidade) para cada som largado -->
+    <div id="controls-area">
+        <!-- Aqui serão criados dinamicamente os menus -->
     </div>
 
     <script src="script.js"></script>
