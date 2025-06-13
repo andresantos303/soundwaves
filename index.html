@@ -1,48 +1,56 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SoundWaves</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoundWaves</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h1>Cria a tua melodia</h1>
+  <div class="container">
+    <h1>🎵 Cria a tua melodia</h1>
 
-    <!-- Área onde estão os ícones de som pré-definidos -->
+
     <div id="sound-palette">
-        <div class="sound-icon" draggable="true" data-sound="sounds/drums.mp3">
-            <img src="icons/beat1.png" alt="Beat 1" />
-            <span>Beat 1</span>
-        </div>
-        <div class="sound-icon" draggable="true" data-sound="sounds/beat2.mp3">
-            <img src="icons/beat2.png" alt="Beat 2" />
-            <span>Beat 2</span>
-        </div>
-        <div class="sound-icon" draggable="true" data-sound="sounds/bass1.mp3">
-            <img src="icons/bass1.png" alt="Bass 1" />
-            <span>Bass 1</span>
-        </div>
-        <div class="sound-icon" draggable="true" data-sound="sounds/melody1.mp3">
-            <img src="icons/melody1.png" alt="Melody 1" />
-            <span>Melody 1</span>
-        </div>
-        <div class="sound-icon" draggable="true" data-sound="sounds/melody2.mp3">
-            <img src="icons/melody2.png" alt="Melody 2" />
-            <span>Melody 2</span>
-        </div>
+      <div class="sound-icon beat" draggable="true" data-sound="sounds/drums.mp3">
+        <img src="icons/drum.webp" alt="Beat 1" />
+        <span>Beat 1</span>
+      </div>
+      <div class="sound-icon beat" draggable="true" data-sound="sounds/500284__danlucaz__drum-beat-loop-1.wav">
+        <img src="icons/tambor.webp" alt="Beat 2" />
+        <span>Beat 2</span>
+      </div>
+      <div class="sound-icon bass" draggable="true" data-sound="sounds/bass1.mp3">
+        <img src="icons/guitarra.svg" alt="Bass 1" />
+        <span>Bass 1</span>
+      </div>
+      <div class="sound-icon melody" draggable="true" data-sound="sounds/melody.mp3">
+        <img src="icons/guitarra2.png" alt="Melody 1" />
+        <span>Melody 1</span>
+      </div>
+      <div class="sound-icon melody" draggable="true" data-sound="sounds/melody2.mp3">
+        <img src="icons/melodia.jpg" alt="Melody 2" />
+        <span>Melody 2</span>
+      </div>
+            <div class="sound-icon custom-upload">
+        <label for="customSound">
+            <img src="https://img.freepik.com/vetores-gratis/alem-disso-vetor-de-tipografia-de-pincelada-de-simbolo_53876-166821.jpg?semt=ais_hybrid&w=740" alt="Adicionar som" />
+            <span>Importar Som</span>
+        </label>
+        <input type="file" id="customSound" accept="audio/*" style="display: none;" />
+</div>
+
     </div>
 
-    <!-- Canvas onde se largam os sons -->
+    
     <div id="canvas-area">
-        <p>Arrasta aqui os sons para começar a tocar</p>
+      <p>🎧 Arrasta aqui os sons para começar a tocar</p>
     </div>
 
-    <!-- Área de menus de controlo (volume e velocidade) para cada som largado -->
-    <div id="controls-area">
-        <!-- Aqui serão criados dinamicamente os menus -->
-    </div>
+    
+    <div id="controls-area"></div>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

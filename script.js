@@ -8,9 +8,7 @@ const controlsArea = document.getElementById('controls-area');
 // 2) Para cada ícone de som, ativar o drag
 soundIcons.forEach(icon => {
     icon.addEventListener('dragstart', ev => {
-        // Guarda o caminho do som nos dados de arraste
         ev.dataTransfer.setData('text/plain', icon.dataset.sound);
-        // Também pode guardar o nome/imagem para usar depois
         ev.dataTransfer.setData('text/name', icon.querySelector('span').innerText);
         ev.dataTransfer.setData('text/icon', icon.querySelector('img').src);
     });
@@ -32,39 +30,32 @@ canvas.addEventListener('drop', ev => {
     ev.preventDefault();
     canvas.classList.remove('drag-over');
 
-    // Pega informação do ficheiro e nome
     const soundPath = ev.dataTransfer.getData('text/plain');
     const soundName = ev.dataTransfer.getData('text/name');
     const iconSrc = ev.dataTransfer.getData('text/icon');
 
-    // Cria um elemento <audio> e começa a tocar em loop
     const audio = new Audio(soundPath);
     audio.loop = true;
-    audio.volume = 0.5;           // volume inicial a meio (0 a 1)
-    audio.playbackRate = 1.0;     // velocidade normal
+    audio.volume = 0.5;
+    audio.playbackRate = 1.0;
     audio.play();
 
-    // Cria a representação dentro do canvas (pode ser apenas um ícone)
     const droppedIcon = document.createElement('img');
     droppedIcon.src = iconSrc;
     droppedIcon.alt = soundName;
     droppedIcon.classList.add('dropped-sound');
-    // Podes posicionar à vontade; aqui vamos só empurrar para o centro
     droppedIcon.style.width = '60px';
     droppedIcon.style.position = 'absolute';
-    // Para simplificar, posicionamos no local onde largaste
     const rect = canvas.getBoundingClientRect();
-    const x = ev.clientX - rect.left - 30; // 30px metade da largura/altura da imagem
+    const x = ev.clientX - rect.left - 30;
     const y = ev.clientY - rect.top - 30;
     droppedIcon.style.left = `${x}px`;
     droppedIcon.style.top = `${y}px`;
     canvas.appendChild(droppedIcon);
 
-    // 6) Criar painel de controlo por baixo para volume e velocidade
     const panel = document.createElement('div');
     panel.classList.add('control-panel');
 
-    // Ícone e nome à esquerda
     const infoDiv = document.createElement('div');
     infoDiv.classList.add('info');
     const thumb = document.createElement('img');
@@ -75,11 +66,9 @@ canvas.addEventListener('drop', ev => {
     infoDiv.appendChild(thumb);
     infoDiv.appendChild(title);
 
-    // Grupo de sliders
     const slidersDiv = document.createElement('div');
     slidersDiv.classList.add('slider-group');
 
-    // Slider de volume (0 a 1)
     const labelVol = document.createElement('label');
     labelVol.textContent = 'Volume';
     const sliderVol = document.createElement('input');
@@ -87,12 +76,11 @@ canvas.addEventListener('drop', ev => {
     sliderVol.min = 0;
     sliderVol.max = 1;
     sliderVol.step = 0.01;
-    sliderVol.value = audio.volume; // inicial 0.5
+    sliderVol.value = audio.volume;
     sliderVol.addEventListener('input', () => {
         audio.volume = parseFloat(sliderVol.value);
     });
 
-    // Slider de velocidade (0.5x a 2x)
     const labelSpeed = document.createElement('label');
     labelSpeed.textContent = 'Velocidade';
     const sliderSpeed = document.createElement('input');
@@ -100,18 +88,16 @@ canvas.addEventListener('drop', ev => {
     sliderSpeed.min = 0.5;
     sliderSpeed.max = 2.0;
     sliderSpeed.step = 0.01;
-    sliderSpeed.value = audio.playbackRate; // inicial 1.0
+    sliderSpeed.value = audio.playbackRate;
     sliderSpeed.addEventListener('input', () => {
         audio.playbackRate = parseFloat(sliderSpeed.value);
     });
 
-    // Adiciona tudo ao slidersDiv
     slidersDiv.appendChild(labelVol);
     slidersDiv.appendChild(sliderVol);
     slidersDiv.appendChild(labelSpeed);
     slidersDiv.appendChild(sliderSpeed);
 
-    // Botão para parar e remover
     const removeBtn = document.createElement('button');
     removeBtn.textContent = 'Remover';
     removeBtn.addEventListener('click', () => {
@@ -121,11 +107,87 @@ canvas.addEventListener('drop', ev => {
         droppedIcon.remove();
     });
 
-    // Monta o painel: info + sliders + remover
     panel.appendChild(infoDiv);
     panel.appendChild(slidersDiv);
     panel.appendChild(removeBtn);
 
-    // Acrescenta o painel à área de controlos
     controlsArea.appendChild(panel);
+});
+
+const customSoundInput = document.getElementById('customSound');
+const soundPalette = document.getElementById('sound-palette');
+
+customSoundInput.addEventListener('change', () => {
+  const files = customSoundInput.files;
+  if (files.length === 0) return;
+
+  const file = files[0];
+  const objectURL = URL.createObjectURL(file);
+
+  const newSoundIcon = document.createElement('div');
+  newSoundIcon.classList.add('sound-icon', 'custom-imported');
+  newSoundIcon.setAttribute('draggable', 'true');
+  newSoundIcon.dataset.sound = objectURL;
+  newSoundIcon.style.position = 'relative'; // para o botão remover
+
+  // Nova imagem (ícone de som)
+  const img = document.createElement('img');
+  img.src = 'https://e7.pngegg.com/pngimages/31/360/png-clipart-loudspeaker-sound-computer-icons-sound-icon-logo-sound-thumbnail.png';
+  img.alt = 'Som Importado';
+  img.style.width = '60px';          // mesmo tamanho dos outros
+  img.style.height = '60px';
+  img.style.objectFit = 'contain';
+  img.style.display = 'block';
+  img.style.margin = '0 auto';       // centralizado horizontalmente
+  newSoundIcon.appendChild(img);
+
+  // Não mostrar nome visualmente, só guardar no drag
+  const soundName = file.name;
+
+  // Botão remover com estilo igual aos anteriores
+  const removeBtn = document.createElement('button');
+  removeBtn.textContent = '×';
+  removeBtn.title = 'Remover som';
+
+  removeBtn.style.position = 'absolute';
+  removeBtn.style.top = '5px';
+  removeBtn.style.right = '5px';
+  removeBtn.style.backgroundColor = 'rgba(231, 76, 60, 0.85)';
+  removeBtn.style.color = '#fff';
+  removeBtn.style.border = 'none';
+  removeBtn.style.borderRadius = '50%';
+  removeBtn.style.width = '24px';
+  removeBtn.style.height = '24px';
+  removeBtn.style.cursor = 'pointer';
+  removeBtn.style.fontWeight = 'bold';
+  removeBtn.style.fontSize = '18px';
+  removeBtn.style.lineHeight = '22px';
+  removeBtn.style.padding = '0';
+  removeBtn.style.boxShadow = '0 0 5px rgba(0,0,0,0.4)';
+  removeBtn.style.transition = 'background-color 0.3s ease';
+  removeBtn.style.zIndex = '10';
+
+  removeBtn.addEventListener('mouseenter', () => {
+    removeBtn.style.backgroundColor = 'rgba(192, 57, 43, 1)';
+  });
+  removeBtn.addEventListener('mouseleave', () => {
+    removeBtn.style.backgroundColor = 'rgba(231, 76, 60, 0.85)';
+  });
+
+  removeBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    URL.revokeObjectURL(objectURL);
+    newSoundIcon.remove();
+  });
+
+  newSoundIcon.appendChild(removeBtn);
+  soundPalette.appendChild(newSoundIcon);
+
+  newSoundIcon.addEventListener('dragstart', ev => {
+    ev.dataTransfer.setData('text/plain', newSoundIcon.dataset.sound);
+    ev.dataTransfer.setData('text/name', soundName);
+    ev.dataTransfer.setData('text/icon', img.src);
+  });
+
+  customSoundInput.value = '';
 });
