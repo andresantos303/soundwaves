@@ -46,12 +46,28 @@ canvas.addEventListener('drop', ev => {
     droppedIcon.classList.add('dropped-sound');
     droppedIcon.style.width = '60px';
     droppedIcon.style.position = 'absolute';
-    const rect = canvas.getBoundingClientRect();
-    const x = ev.clientX - rect.left - 30;
-    const y = ev.clientY - rect.top - 30;
-    droppedIcon.style.left = `${x}px`;
-    droppedIcon.style.top = `${y}px`;
+  const iconSize = 60;
+  const padding = 20;
+  const existingIcons = canvas.querySelectorAll('.dropped-sound').length;
+  const canvasRect = canvas.getBoundingClientRect();
+  const canvasWidth = canvasRect.width;
+  const canvasHeight = canvasRect.height;
+  const columns = Math.floor((canvasWidth - padding) / (iconSize + padding));
+  const col = existingIcons % columns;
+  const row = Math.floor(existingIcons / columns);
+  let x = padding + col * (iconSize + padding);
+  let y = padding + row * (iconSize + padding);
+  x += Math.floor(Math.random() * 10 - 5);
+  y += Math.floor(Math.random() * 10 - 5);
+  x = Math.min(x, canvasWidth - iconSize);
+  y = Math.min(y, canvasHeight - iconSize);
+
+droppedIcon.style.left = `${x}px`;
+droppedIcon.style.top = `${y}px`;
+
+
     canvas.appendChild(droppedIcon);
+    makeIconDraggable(droppedIcon);
 
     const panel = document.createElement('div');
     panel.classList.add('control-panel');
@@ -191,3 +207,46 @@ customSoundInput.addEventListener('change', () => {
 
   customSoundInput.value = '';
 });
+
+
+function makeIconDraggable(iconElement) {
+  iconElement.setAttribute('draggable', 'false');
+
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  iconElement.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    const rect = iconElement.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    iconElement.style.zIndex = 1000; 
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const canvasRect = canvas.getBoundingClientRect();
+
+    let x = e.clientX - canvasRect.left - offsetX;
+    let y = e.clientY - canvasRect.top - offsetY;
+
+    const maxX = canvas.clientWidth - iconElement.offsetWidth;
+    const maxY = canvas.clientHeight - iconElement.offsetHeight;
+    x = Math.max(0, Math.min(x, maxX));
+    y = Math.max(0, Math.min(y, maxY));
+
+    iconElement.style.left = `${x}px`;
+    iconElement.style.top = `${y}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      iconElement.style.zIndex = 1;
+    }
+  });
+}
+
+
+
